@@ -4,7 +4,7 @@
 
 create a `config.json` file inside the directory with the following parameters:
 
-```json
+```js
 {
 	"token": "", // discord bot token
 	"mongoUri": "", // mongodb connection uri
