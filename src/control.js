@@ -6,6 +6,8 @@ const config = require('../config.json');
 const db = require('./database');
 const log = require('./log');
 
+
+
 // discord setup
 const client = new discord.Client();
 
@@ -99,6 +101,8 @@ function listVoiceChannelUsers() {
 				if (student) { // user already exists
 
 					student.logtime += 15000;
+					if (state.member.nickname && student.login != state.member.nickname)
+						student.login = state.member.nickname;
 					student.save()
 						.catch(err => {
 
@@ -108,7 +112,7 @@ function listVoiceChannelUsers() {
 
 				} else { // user does not exist yet
 
-					db.Student.create({ discord_id: state.id, discord_tag: state.member.user.tag, login: state.member.user.username, logtime: 15000 })
+					db.Student.create({ discord_id: state.id, discord_tag: state.member.user.tag, login: state.member.nickname ? state.member.nickname : state.member.user.username, logtime: 15000 })
 						.catch(err => {
 
 							log("error trying to create the user " + state.member.user.tag + " in the database: " + err);
