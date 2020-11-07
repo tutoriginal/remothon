@@ -1,0 +1,9 @@
+{
+	"name": "remote-relay",
+	"dependencies": {
+		"countdown": "^2.6.0",
+		"cron": "^1.8.2",
+		"discord.js": "^12.4.1",
+		"mongoose": "^5.10.12"
+	}
+}
