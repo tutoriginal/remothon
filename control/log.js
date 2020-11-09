@@ -1,12 +1,13 @@
 // dependencies
 const fs = require('fs');
+const path = require('path');
 const util = require('util');
 const config = require('../config.json');
 
 
 
 // logging file
-var log_file = fs.createWriteStream(__dirname + '/../logs/errors.log', { flags: 'w' });
+var log_file = fs.createWriteStream(path.join(__dirname , '..', 'logs', 'errors.log'), { flags: 'w' });
 
 // logging function
 function log(data) {
