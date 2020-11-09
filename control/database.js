@@ -5,20 +5,26 @@ const config = require('../config.json');
 
 
 // mongoose connection
-
 mongoose
 	.connect(config.mongoUri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true })
 	.catch(err => log("could not connect to database"));
 
 
+
 // student shema
 const StudentSchema = new mongoose.Schema({
 
-	discord_id: { type: String, unique: true, required: true },
+	ft_id: { type: String },
+	
+	ft_login: { type: String },
 
-	discord_tag: { type: String, required: true },
+	discord_id: { type: String },
 
-	login: { type: String, required: true },
+	discord_tag: { type: String },
+
+	discord_nick: { type: String },
+
+	admin: { type: Boolean, default: true },
 
 	logtime: { type: Number, default: 0 }
 
@@ -26,4 +32,8 @@ const StudentSchema = new mongoose.Schema({
 
 const Student = mongoose.model('Student', StudentSchema);
 
+
+
+// exports
 module.exports.Student = Student;
+module.exports.connection = mongoose.connection;

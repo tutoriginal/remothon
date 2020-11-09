@@ -29,13 +29,13 @@ client.on("ready", () => {
 
 
 // control loop (called every 15 seconds)
-var control = new cron.CronJob('*/4 * * * * *', () => {
+var control = new cron.CronJob('*/15 * * * * *', () => {
 
 	if (Date.now() < config.eventStart) { // event has not yet started
 
 		statusStartCountdown();
 
-	} else if (Date.now() < config.eventEnd) { // event is ongoing
+	} else if (Date.now() < config.eventStart + 86400000) { // event is ongoing
 
 		statusEndCountdown();
 		listVoiceChannelUsers();
@@ -66,7 +66,7 @@ function statusStartCountdown() {
 
 // countdown to the end of the event in the bot status
 function statusEndCountdown() {
-	const time = countdown(null, config.eventEnd, countdown.HOURS | countdown.MINUTES | countdown.SECONDS, 1, 0).toString();
+	const time = countdown(null, config.eventStart + 86400000, countdown.HOURS | countdown.MINUTES | countdown.SECONDS, 1, 0).toString();
 	client.user.setPresence({
 		status: 'online',
 		activity: {
@@ -95,14 +95,15 @@ function listVoiceChannelUsers() {
 	const activeUsers = client.guilds.cache.get(config.guild).voiceStates.cache.filter(state => state.channelID != state.guild.afkChannelID && !state.deaf)
 	activeUsers.forEach(state => { // iterate through every user connected to any voice channel (except afk) and not deafened
 
-		db.Student.findOne({ discord_id: state.id }) // find user in database
+		db.Student.findOne({ $or: [ { discord_id: state.id }, { ft_login: state.member.nickname }] }) // find user in database
 			.then(student => {
 
 				if (student) { // user already exists
 
 					student.logtime += 15000;
-					if (state.member.nickname && student.login != state.member.nickname)
-						student.login = state.member.nickname;
+					student.discord_id = state.id;
+					student.discord_tag = state.member.user.tag;
+					student.discord_nick = state.member.nickname;
 					student.save()
 						.catch(err => {
 
@@ -112,7 +113,7 @@ function listVoiceChannelUsers() {
 
 				} else { // user does not exist yet
 
-					db.Student.create({ discord_id: state.id, discord_tag: state.member.user.tag, login: state.member.nickname ? state.member.nickname : state.member.user.username, logtime: 15000 })
+					db.Student.create({ discord_id: state.id, discord_tag: state.member.user.tag, discord_nick: state.member.nickname ? state.member.nickname : state.member.user.username, logtime: 15000 })
 						.catch(err => {
 
 							log("error trying to create the user " + state.member.user.tag + " in the database: " + err);

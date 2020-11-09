@@ -1,8 +1,5 @@
 {
-	"name": "remote-relay",
-	"scripts": {
-		"start": "node ./src/control.js"
-	},
+	"name": "remothon-control",
 	"dependencies": {
 		"countdown": "^2.6.0",
 		"cron": "^1.8.2",
