@@ -1,0 +1,21 @@
+<div class="header">
+	<a href="/">
+		<h1>Remoth<green>on</green></h1>
+	</a>
+	<ul>
+		<li>
+			<a href="/planning">planning</a>
+		</li>
+		<li>
+			<a href="/stats">stats</a>
+		</li>
+		{{#if isAdmin}}
+		<li>
+			<a href="/admin">admin</a>
+		</li>
+		{{/if}}
+		<li>
+			<a href="/auth/logout">logout</a>
+		</li>
+	</ul>
+</div>

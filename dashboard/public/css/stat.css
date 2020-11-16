@@ -1,0 +1,22 @@
+.stat
+{
+	display: block;
+	margin-top: 1vh;
+	margin-bottom: 1vh;
+	font-family: 'Roboto', sans-serif;
+	font-size: 15px;
+}
+
+.stat login
+{
+	font-weight: 900;
+	text-transform: uppercase;
+}
+
+.stat discord
+{
+	background-color: #252525;
+	color:  #fff9ee;
+	padding: 1px;
+	border-radius: 4px;
+}

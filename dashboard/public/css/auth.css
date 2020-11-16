@@ -1,0 +1,25 @@
+.auth {
+	margin-top: 10vh;
+	margin-left: 25%;
+	width: 50%;
+	padding: 10px;
+	border-radius: 15px;
+	background-color: #252525;
+	color: #fff9ee;
+	text-align: center;
+	font-family: 'Roboto Mono', monospace;
+}
+
+.auth a {
+	text-decoration: none;
+	color: inherit;
+}
+
+.auth a:hover {
+	color: #c5bfb2;
+}
+
+.auth h1 {
+	margin: 10px;
+	font-size: 30px;
+}

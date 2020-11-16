@@ -1,0 +1,87 @@
+.content post {
+	font-family: 'Roboto', sans-serif;
+	font-weight: 700;
+	font-size: 30px;
+	margin-top: 2vh;
+	margin-bottom: 2vh;
+	display: block;
+}
+
+.content chapter {
+	text-transform: uppercase;
+	font-family: 'Roboto Mono', Courier;
+	font-weight: 500;
+	font-size: 15px;
+	margin-top: 1vh;
+	margin-bottom: 2vh;
+	display: block;
+	border-bottom: 1px solid #252525;
+	padding-bottom: 2px;
+}
+
+.content chapid {
+	color: #7a766f;
+	margin-right: 10px;
+	font-size: 0.8em;
+}
+
+.content hat {
+	display: block;
+	text-align: justify;
+	font-family: 'Roboto Mono', Courier;
+	font-size: 13px;
+	font-weight: 300;
+	color: #7a766f;
+}
+
+.content p {
+	text-align: justify;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 400;
+	font-size: 15px;
+	margin-top: 2vh;
+	margin-bottom: 2vh;
+}
+
+.content grey {
+	color: #7a766f;
+}
+
+.content a {
+	text-decoration: none;
+	color: inherit;
+	padding: 1px;
+	padding-left: 3px;
+	padding-right: 3px;
+	border-radius: 4px;
+	background-color: #30c27b;
+}
+
+.content a:hover {
+	background-color: #3ae994;
+}
+
+.content img {
+	max-width: 100%;
+	border-radius: 15px;
+	vertical-align: top;
+}
+
+.content metafooter {
+	text-align: right;
+	font-family: 'Roboto Mono', Courier;
+	font-size: 14px;
+	font-weight: 300;
+	color: #7a766f;
+	margin-top: 4vh;
+	margin-bottom: 4vh;
+	display: block;
+	padding-bottom: 4vh;
+	border-bottom: 1px solid black;
+}
+
+.content metaid {
+	text-transform: lowercase;
+	font-weight: 500;
+	color: #252525;
+}

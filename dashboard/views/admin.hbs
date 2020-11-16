@@ -1,0 +1,13 @@
+{{> 'header' }}
+
+<div class="content">
+	<post>Admin panel</post>
+	<chapter>
+		<chapid>#</chapid>students
+	</chapter>
+	{{#each student}}
+	<div class="stat"><login>{{this.login}}</login> <grey>-</grey> <discord>{{this.discord}}</discord> <grey> - logtime: </grey> <logtime>{{this.logtime}}</logtime></div>
+	{{/each}}
+</div>
+
+{{> 'footer' }}

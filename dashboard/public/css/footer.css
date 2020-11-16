@@ -1,0 +1,29 @@
+.footer {
+	margin-top: 15vh;
+	padding: 10px;
+	color: #252525;
+	text-align: center;
+	font-family: 'Roboto Mono', monospace;
+}
+
+.footer a {
+	text-decoration: none;
+	color: inherit;
+	padding: 1px;
+	padding-left: 3px;
+	padding-right: 3px;
+	border-radius: 4px;
+}
+
+.footer a:hover {
+	background-color: #e7e0d1;
+}
+
+.footer copy {
+	font-size: 13px;
+	color: #7a766f;
+}
+
+.footer dg {
+	color: #252525;
+}

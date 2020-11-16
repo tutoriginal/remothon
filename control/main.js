@@ -2,16 +2,19 @@
 const discord = require('discord.js');
 const cron = require('cron');
 const countdown = require('countdown');
+const db = require('../shared/database');
+const log = require('../shared/log');
+const commands = require('./commands');
+const api = require('../shared/api');
 const config = require('../config.json');
-const db = require('./database');
-const log = require('./log');
+
 
 
 
 // discord setup
 const client = new discord.Client();
 
-client.login(config.token);
+client.login(config.control.token);
 
 client.on("ready", () => {
 
@@ -31,11 +34,11 @@ client.on("ready", () => {
 // control loop (called every 15 seconds)
 var control = new cron.CronJob('*/15 * * * * *', () => {
 
-	if (Date.now() < config.eventStart) { // event has not yet started
+	if (Date.now() < config.shared.eventStart) { // event has not yet started
 
 		statusStartCountdown();
 
-	} else if (Date.now() < config.eventStart + 86400000) { // event is ongoing
+	} else if (Date.now() < config.shared.eventStart + 86400000) { // event is ongoing
 
 		statusEndCountdown();
 		listVoiceChannelUsers();
@@ -52,7 +55,7 @@ var control = new cron.CronJob('*/15 * * * * *', () => {
 
 // countdown to the start of the event in the bot status
 function statusStartCountdown() {
-	const time = countdown(null, config.eventStart, countdown.DAYS | countdown.HOURS | countdown.MINUTES | countdown.SECONDS, 1, 0).toString();
+	const time = countdown(null, config.shared.eventStart, countdown.DAYS | countdown.HOURS | countdown.MINUTES | countdown.SECONDS, 1, 0).toString();
 	client.user.setPresence({
 		status: 'dnd',
 		activity: {
@@ -66,7 +69,7 @@ function statusStartCountdown() {
 
 // countdown to the end of the event in the bot status
 function statusEndCountdown() {
-	const time = countdown(null, config.eventStart + 86400000, countdown.HOURS | countdown.MINUTES | countdown.SECONDS, 1, 0).toString();
+	const time = countdown(null, config.shared.eventStart + 86400000, countdown.HOURS | countdown.MINUTES | countdown.SECONDS, 1, 0).toString();
 	client.user.setPresence({
 		status: 'online',
 		activity: {
@@ -92,41 +95,58 @@ function statusFinished() {
 
 
 function listVoiceChannelUsers() {
-	const activeUsers = client.guilds.cache.get(config.guild).voiceStates.cache.filter(state => state.channel && state.channelID != state.guild.afkChannelID && !state.deaf)
+	const activeUsers = client.guilds.cache.get(config.control.guild).voiceStates.cache.filter(state => state.channel && state.channelID != state.guild.afkChannelID && !state.deaf)
 	activeUsers.forEach(state => { // iterate through every user connected to any voice channel (except afk) and not deafened
 
-		db.Student.findOne({ $or: [ { discord_id: state.id }, { ft_login: state.member.nickname }] }) // find user in database
-			.then(student => {
+		const nick = (state.member.nickname ? state.member.nickname : state.member.user.username).split("|")[0].trim();
 
-				if (student) { // user already exists
+		api.SearchUser(nick, (err, exists) => {
 
-					student.logtime += 15000;
-					student.discord_id = state.id;
-					student.discord_tag = state.member.user.tag;
-					student.discord_nick = state.member.nickname;
-					student.save()
-						.catch(err => {
+			if (err) log(err);
 
-							log("error trying to update the user " + state.member.user.tag + " in the database: " + err);
+			else if (exists) {
 
-						});
+				db.Student.findOne({ $or: [{ discord_id: state.id }, { ft_login: nick }] }) // find user in database
+					.then(student => {
 
-				} else { // user does not exist yet
+						if (student) { // user already exists
 
-					db.Student.create({ discord_id: state.id, discord_tag: state.member.user.tag, discord_nick: state.member.nickname ? state.member.nickname : state.member.user.username, logtime: 15000 })
-						.catch(err => {
+							student.logtime += 15000;
+							student.discord_id = state.id;
+							student.discord_tag = state.member.user.tag;
+							student.discord_nick = nick;
+							student.save()
+								.catch(err => {
 
-							log("error trying to create the user " + state.member.user.tag + " in the database: " + err);
+									log("error trying to update the user " + state.member.user.tag + " in the database: " + err);
 
-						});
+								});
 
-				}
-			})
-			.catch(err => {
+						} else { // user does not exist yet
 
-				log("error trying to find the user " + state.member.user.tag + " in the database: " + err);
+							db.Student.create({ discord_id: state.id, discord_tag: state.member.user.tag, discord_nick: nick, logtime: 15000 })
+								.catch(err => {
 
-			});
+									log("error trying to create the user " + state.member.user.tag + " in the database: " + err);
+
+								});
+
+						}
+					})
+					.catch(err => {
+
+						log("error trying to find the user " + state.member.user.tag + " in the database: " + err);
+
+					});
+
+			}
+
+		});
 
 	});
 }
+
+
+
+// commands handler
+client.on('message', commands.router);
