@@ -100,48 +100,38 @@ function listVoiceChannelUsers() {
 
 		const nick = (state.member.nickname ? state.member.nickname : state.member.user.username).split("|")[0].trim();
 
-		api.SearchUser(nick, (err, exists) => {
+		db.Student.findOne({ $or: [{ discord_id: state.id }, { ft_login: nick }] }) // find user in database
+			.then(student => {
 
-			if (err) log(err);
+				if (student) { // user already exists
 
-			else if (exists) {
+					student.logtime += 15000;
+					student.discord_id = state.id;
+					student.discord_tag = state.member.user.tag;
+					student.discord_nick = nick;
+					student.save()
+						.catch(err => {
 
-				db.Student.findOne({ $or: [{ discord_id: state.id }, { ft_login: nick }] }) // find user in database
-					.then(student => {
+							log("error trying to update the user " + state.member.user.tag + " in the database: " + err);
 
-						if (student) { // user already exists
+						});
 
-							student.logtime += 15000;
-							student.discord_id = state.id;
-							student.discord_tag = state.member.user.tag;
-							student.discord_nick = nick;
-							student.save()
-								.catch(err => {
+				} else { // user does not exist yet
 
-									log("error trying to update the user " + state.member.user.tag + " in the database: " + err);
+					db.Student.create({ discord_id: state.id, discord_tag: state.member.user.tag, discord_nick: nick, logtime: 15000 })
+						.catch(err => {
 
-								});
+							log("error trying to create the user " + state.member.user.tag + " in the database: " + err);
 
-						} else { // user does not exist yet
+						});
 
-							db.Student.create({ discord_id: state.id, discord_tag: state.member.user.tag, discord_nick: nick, logtime: 15000 })
-								.catch(err => {
+				}
+			})
+			.catch(err => {
 
-									log("error trying to create the user " + state.member.user.tag + " in the database: " + err);
+				log("error trying to find the user " + state.member.user.tag + " in the database: " + err);
 
-								});
-
-						}
-					})
-					.catch(err => {
-
-						log("error trying to find the user " + state.member.user.tag + " in the database: " + err);
-
-					});
-
-			}
-
-		});
+			});
 
 	});
 }

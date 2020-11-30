@@ -17,6 +17,7 @@ function SearchUser(login, callback) {
 		if (!token) return callback("no login provided", null);
 		request.get('https://api.intra.42.fr/v2/campus/12/users?filter[login]=' + login + "&access_token=" + token, (err, res) => {
 			if (err) return callback(err, null);
+			if (!res.body) return callback(false, 0);
 			return callback(false, JSON.parse(res.body).length > 0);
 		});
 	});
