@@ -98,7 +98,7 @@ function listVoiceChannelUsers() {
 	const activeUsers = client.guilds.cache.get(config.control.guild).voiceStates.cache.filter(state => state.channel && state.channelID != state.guild.afkChannelID && !state.deaf)
 	activeUsers.forEach(state => { // iterate through every user connected to any voice channel (except afk) and not deafened
 
-		const nick = (state.member.nickname ? state.member.nickname : state.member.user.username).split("|")[0].trim();
+		const nick = (state.member.nickname ? state.member.nickname : state.member.user.username).split("|")[0].trim().toLowerCase();
 
 		db.Student.findOne({ $or: [{ discord_id: state.id }, { ft_login: nick }] }) // find user in database
 			.then(student => {
