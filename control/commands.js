@@ -117,7 +117,7 @@ const commands = [
 		requiredRole: null,
 		execute(message, args, done) {
 
-			message.guild.channels.cache.get(config.control.broadcastChannel).send(embed.broadcastEmbed(message.content.slice(config.control.commandPrefix.length + "broadcast".length + 1), message.member.nickname, Date.now()));
+			message.guild.channels.cache.get(config.control.broadcastChannel).send(embed.broadcastEmbed(message.content.slice(config.control.commandPrefix.length + "broadcast".length + 1), "- Tutors", Date.now()));
 
 			done(null);
 		},
