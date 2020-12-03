@@ -2,3 +2,5 @@ package-lock.json
 node_modules/
 config.json
 logs/
+challenger.txt
+warrior.txt
