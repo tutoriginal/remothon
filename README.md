@@ -71,5 +71,5 @@ $ node ./index.js
 
 # License
 
-Libcarbon is distributed under the [ISC license](/LICENSE).
+This reposidory is distributed under the [ISC license](/LICENSE).
 
