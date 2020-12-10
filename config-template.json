@@ -1,0 +1,23 @@
+{
+	"shared": {
+		"uri": "",
+		"clientId": "",
+		"clientSecret": "",
+		"eventStart": 0
+	},
+	"control": {
+		"run": true,
+		"token": "",
+		"guild": "",
+		"announcementsChannel": "",
+		"commandChannel": "",
+		"broadcastChannel": "",
+		"commandPrefix": "sudo"
+	},
+	"dashboard": {
+		"run": true,
+		"port": 8080,
+		"callbackUrl": "http://localhost:8080/auth/callback",
+		"sessionSecret": ""
+	}
+}
